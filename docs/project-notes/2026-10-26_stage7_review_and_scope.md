@@ -2,11 +2,9 @@
 
 Date: 26 October 2026
 
-## Review and authorisation
+## Human review and approval
 
-The project owner authorised the overnight pilot on 25 October before completing the document review, choosing to use the available compute window and review the selections afterwards. On 26 October, the owner confirmed having read `experiments/stage7_pilot/Review.html`, accepted the proposed annotations for this pilot, and approved proceeding.
-
-The original launch acceptance flag records the command used. This note records the subsequent human review; original archives and experiment records remain unchanged.
+The project owner has read `experiments/stage7_pilot/Review.html`, accepted the proposed annotations for this pilot, and approved proceeding to broader evaluation.
 
 ## What was accepted
 
@@ -14,9 +12,15 @@ The review covers the pilot's 20 positive training examples, 20 contextual penal
 
 ## Scope decision
 
-Keep the current pilot approach fixed while expanding matched evaluation of the existing adapters. Avoid an open-ended search over penalty tokens and penalty strengths at this stage. More detailed optimisation may be pursued in a future extension, including work with other models, if justified by available time and compute.
+Keep the current pilot approach fixed while expanding matched evaluation of the existing adapters. Avoid an open-ended search over penalty tokens and penalty strengths at this stage.
 
 The preliminary combination of concise fine-tuning and concise prompting is sufficiently promising to warrant broader evaluation. This is a decision to proceed, not a claim that accuracy preservation has already been established. Retain the targeted-penalty branch and its observed accuracy trade-off as part of the evidence.
+
+## Future extension
+
+If the project is expanded, including to larger models, investigate which context-specific tokens and continuations contribute most to unnecessary repetition or reasoning detours. Assess both which occurrences to penalise and how strongly to penalise them, with the aim of preserving more of the original model's accuracy while reducing reasoning cost. Distinguish harmful repetition from useful verification and error correction rather than treating transition words as inherently undesirable.
+
+This more detailed optimisation is deferred to keep the current study focused and proportionate to its scope.
 
 ## Next evidence
 
@@ -29,4 +33,4 @@ Compare the trained adapters with the original model under matched standard and 
 - [Current project overview and pilot results](../../README.md)
 - [Research snapshot uploaded 26 October](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/research-update-20261026T171315Z-975570)
 
-This note documents the owner's explicit decisions in the project conversation. It does not change the master manual, training package, model checkpoints or original results.
+This note documents the owner's review and scope decisions. It does not change the master manual, training package, model checkpoints or original results.
