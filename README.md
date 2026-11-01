@@ -10,11 +10,11 @@ The goal is simple: **get the same quality of answers with less computation.**
 
 ## The Project
 
-We're starting with Qwen3-1.7B, a small open-source reasoning model, and testing it against mathematical problems to measure how accurately and efficiently it works.
+We studied Qwen3-1.7B, a small open-weight reasoning model, using mathematical problems to measure how accurately and efficiently it works.
 
-By examining where the model wastes time and tokens, we can identify opportunities to improve its reasoning through training.
+By examining where the model wastes time and tokens, we identified opportunities to shorten its reasoning through targeted fine-tuning.
 
-We'll compare the original model against modified versions, measuring whether we can reduce unnecessary thinking without sacrificing the quality of its answers.
+We compared the original model against fine-tuned versions under standard and concise prompts, measuring both the efficiency gains and the effect on answer quality.
 
 ## Why It Matters
 
@@ -24,45 +24,83 @@ If we can make models reason more efficiently while retaining their capabilities
 
 This independent study is inspired by UkisAI's Swift research.
 
+## Results — updated 1 November 2026
+
+**The selected trained model with concise prompting used 76.8% fewer thinking tokens and 63.1% less batched generation time than the original model with the standard prompt.** Final-answer accuracy was **88.8% versus 90.1%**, a decrease of **1.28 percentage points**.
+
+This is a substantial efficiency improvement with a modest observed accuracy trade-off. It does not establish unchanged or statistically equivalent accuracy.
+
+### Final held-out evaluation
+
+The configuration was selected using development results before this evaluation. Each row covers the same **600 held-out questions × 3 sampled responses**, giving 1,800 responses per configuration and **5,400 responses overall**. Repeated responses to a question are grouped observations, not 1,800 independent questions.
+
+| Configuration | Correct | Accuracy | Mean thinking tokens | Batched generation time | Truncated |
+|---|---:|---:|---:|---:|---:|
+| Original, standard prompt | 1,622/1,800 | 90.11% | 1,940 | 12.00 hours | 36 |
+| Original, concise prompt | 1,624/1,800 | 90.22% | 1,036 | 7.24 hours | 13 |
+| Targeted-penalty fine-tuning, concise prompt | 1,599/1,800 | 88.83% | 450 | 4.42 hours | 1 |
+
+The headline comparison changes both training and prompting. Against the **original model with the same concise prompt**, the trained configuration used **56.6% fewer thinking tokens** and **38.9% less generation time**, with accuracy **1.39 percentage points lower**. On matched responses, 55 answers became correct and 80 became incorrect.
+
+Batched generation times measure the full generation workload, not individual request latency, training time or model-loading time. All three configurations used the same frozen scoring and generation protocol.
+
+### Individual response timing
+
+A separate Stage 8 run measured batch-size-one generation on **200 development questions**, with one response per question and configuration. These are supplementary timing measurements, not a replacement for the held-out accuracy results above.
+
+| Configuration | Correct | Mean thinking tokens | Mean generation time | Median | 95th percentile |
+|---|---:|---:|---:|---:|---:|
+| Original, standard prompt | 185/200 | 1,586 | 36.2 s | 27.2 s | 86.2 s |
+| Original, concise prompt | 185/200 | 813 | 19.5 s | 14.2 s | 51.5 s |
+| Targeted-penalty fine-tuning, concise prompt | 187/200 | 346 | 15.6 s | 12.9 s | 34.0 s |
+
+The trained combination reduced mean generation time by **56.8%** versus the original standard configuration and **19.8%** versus concise prompting alone. Timings include prompt processing and decoding, but exclude model loading, tokenisation, queueing and network/UI overhead.
+
+The trained adapter's lower measured token throughput prompted a separate-versus-merged LoRA deployment diagnostic. **That diagnostic is prepared but has not yet produced results.** The cause of the throughput difference remains unconfirmed.
+
 ## Evaluation methodology
 
-- Primary correctness metric: Hugging Face Math-Verify.
+- One primary correctness metric: final-answer mathematical accuracy using pinned **Hugging Face Math-Verify 0.9.0**. Internal reasoning that contains the right answer does not override an incorrect final answer.
 - Final answers requested using boxed notation.
-- Track reasoning tokens, generation time, truncation and malformed outputs.
-- Inspect reasoning traces qualitatively to understand failures.
+- Frozen Qwen3 thinking-mode sampling: temperature 0.6, top-p 0.95, top-k 20 and an 8,192-token generation limit.
+- Matched questions, prompts and sampling schedules for each relevant comparison; development and final question partitions are disjoint.
+- Report thinking/output tokens, measured generation time, truncation and malformed responses alongside accuracy.
+- Inspect reasoning traces qualitatively to distinguish useful checking from repetition and unsupported reinterpretation.
+- Experiments ran on a single RTX 3090. Performance figures describe this model, hardware and inference implementation.
 
-## Preliminary findings — 26 October 2026
+## Training and configuration selection
 
-The Stage 7 development pilot compared the original model, ordinary fine-tuning (CE-only), and marker-penalty training under standard and concise prompts. Each configuration used **20 questions × 3 responses**, giving 60 responses per configuration. Correctness is final-answer mathematical accuracy scored using Math-Verify.
+Two LoRA variants were trained: ordinary cross-entropy fine-tuning and the same fine-tuning with a small contextual unlikelihood penalty. The pilot used **20 selected positive traces**, **20 annotated negative positions across 10 questions**, and **five optimiser updates** per variant.
 
-| Model | Prompt | Correct responses | Mean thinking tokens | Generation time |
-|---|---|---:|---:|---:|
-| Original | Standard | 47/60 | 2,033 | 27.0 minutes |
-| Ordinary fine-tuning | Standard | 48/60 | 847 | 16.8 minutes |
-| Marker-penalty training | Standard | 45/60 | 713 | 12.5 minutes |
-| Original | Concise | 48/60 | 911 | 10.5 minutes |
-| Ordinary fine-tuning | Concise | 47/60 | 393 | 7.6 minutes |
-| Marker-penalty training | Concise | 44/60 | 364 | 6.4 minutes |
+The penalty targets a particular next token in an annotated context. It is **not a blanket ban** on words such as “wait”, “but” or “alternatively”; those can also introduce useful checks. The annotations were reviewed by the project owner.
 
-**Training and concise prompting combined usefully in this pilot.** Compared with the original model under the standard prompt, ordinary fine-tuning with the concise prompt reduced mean thinking tokens by approximately **80.7% (2,033 → 393)** and generation time by approximately **71.9% (27.0 → 7.6 minutes)**, with the same number of correct responses: **47/60**. This comparison changes both training and prompting; the separate controls are shown above.
+Following the initial 20-question pilot, the expanded development evaluation used **200 questions × 3 responses across six configurations**:
 
-Compared with concise prompting alone, ordinary fine-tuning reduced thinking tokens by **56.9% (911 → 393)**, with **47/60 versus 48/60** correct. The marker penalty shortened reasoning further but reduced accuracy more, so it is not currently the preferred approach.
+| Configuration | Correct / 600 | Mean thinking tokens |
+|---|---:|---:|
+| Original, standard prompt | 551 | 1,630 |
+| Original, concise prompt | 557 | 743 |
+| Ordinary fine-tuning, standard prompt | 554 | 744 |
+| Ordinary fine-tuning, concise prompt | 554 | 369 |
+| Targeted-penalty fine-tuning, standard prompt | 553 | 657 |
+| Targeted-penalty fine-tuning, concise prompt | 554 | 348 |
 
-These are preliminary development-pilot results, not final held-out benchmark results or proof of equivalent accuracy. Generation-time comparisons use the rounded times reported above. Larger matched evaluation is needed to establish how reliably these gains generalise.
+The targeted-penalty variant with concise prompting was selected for final evaluation. Its initial pilot disadvantage did not persist in the expanded development totals, but the held-out evaluation subsequently showed the accuracy trade-off reported above.
 
-## Next steps
+This remains a small-scale study with a deliberately limited training budget. Reinforcement learning, on-policy distillation, larger-model validation and extensive penalty optimisation were not completed and are not claimed.
 
-Expand the matched evaluation of the promising ordinary fine-tuning approach, assess accuracy and efficiency together, and use the findings to guide subsequent interventions. The longer-term project plan includes reinforcement learning and on-policy distillation; these are not claimed as completed here.
+## Current status
 
-## Research files
+- Baseline, training pilot and expanded development evaluation: complete.
+- Final held-out evaluation: complete, 5,400 responses.
+- Individual response timing: complete, 600 responses.
+- Adapter merge diagnostic: prepared; results pending.
+- Final report, reproduction documentation and repository organisation: in progress.
 
-The [latest research snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/research-update-20261026T171315Z-975570) contains selected project source, configurations, data and results, plus the identified project downloads where present. Original relative paths and a SHA-256 manifest are included. Model weights, checkpoints, environments, caches, backups, the legacy Swift_Replication_Project folder and the master manual are excluded. Local files are retained.
+## Research files and history
 
-## Research history
+The [26 October research snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/research-update-20261026T171315Z-975570) contains selected source, configurations, data and results available at that date. It predates the completed final evaluation and Stage 8 measurements.
 
-Superseded experiments are preserved as stage-organised ZIP attachments
-under [Releases](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases).
-They include original folder structures and file manifests.
+Superseded experiments are preserved as stage-organised ZIP attachments under [Releases](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases), with original folder structures and file manifests. The README now reflects the newer verified results; uploading the newer local evidence and performing the associated cleanup are in progress.
 
-This repository is the main project page. Active source code and further
-results will be added as the study progresses.
+This repository is the main project page. The original study plan is retained as historical planning material; this page describes the work actually completed.
