@@ -101,6 +101,6 @@ This remains a small-scale study with a deliberately limited training budget. Re
 
 The [26 October research snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/research-update-20261026T171315Z-975570) contains selected source, configurations, data and results available at that date. It predates the completed final evaluation and Stage 8 measurements.
 
-Superseded experiments are preserved as stage-organised ZIP attachments under [Releases](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases), with original folder structures and file manifests. The README now reflects the newer verified results; uploading the newer local evidence and performing the associated cleanup are in progress.
+Superseded experiments are preserved as stage-organised ZIP attachments under [Releases](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases), with original folder structures and file manifests. The [1 November research snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/research-2026-11-01_12-03) preserves the newer source, results, training checkpoints and project downloads with original paths and SHA-256 hashes. Its index distinguishes archived-only files, retained active inputs and files moved into the project. The associated cleanup was applied only after downloading and verifying every uploaded archive.
 
 This repository is the main project page. The original study plan is retained as historical planning material; this page describes the work actually completed.
