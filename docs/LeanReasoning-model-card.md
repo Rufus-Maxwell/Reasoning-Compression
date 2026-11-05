@@ -1,4 +1,7 @@
 ---
+license: other
+license_name: leanreasoning-model-license-1.0
+license_link: https://huggingface.co/realDeclan/LeanReasoning/blob/main/LICENSE-LEANREASONING.md
 base_model: Qwen/Qwen3-1.7B
 base_model_relation: finetune
 pipeline_tag: text-generation
@@ -143,4 +146,6 @@ The accompanying index, model configuration, generation configuration, tokenizer
 
 Base model: [Qwen/Qwen3-1.7B](https://huggingface.co/Qwen/Qwen3-1.7B).
 
-The bundled LICENSE preserves the upstream Apache 2.0 terms. This derivative modifies the original weights through fine-tuning and merging. The project's release licence for its modifications has not yet been selected; this card does not assign a new one.
+The model is distributed under the [LeanReasoning Model Licence 1.0](LICENSE-LEANREASONING.md), a custom licence with Apache-2.0-based permissions for eligible recipients and an exclusion for Microsoft Corporation, its controlled/common-control entities, and parties acting on their behalf. This covers Copilot and all other uses, subject to the limited hosting exception described in the licence.
+
+The unchanged upstream Apache 2.0 terms remain in [LICENSE](LICENSE). The custom restriction applies to the project's contributions and derivative distribution, not independently granted rights in Qwen's original model. This derivative modifies the original weights through fine-tuning and merging.
