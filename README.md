@@ -10,7 +10,7 @@ The goal is simple: **get the same quality of answers with less computation.**
 
 ## The Project
 
-**LeanReasoning** is the name of our reasoning-compressed Qwen3-1.7B model.
+**LeanReasoning** is our reasoning-compressed Qwen3-1.7B model. [Get the complete model on Hugging Face](https://huggingface.co/realDeclan/LeanReasoning).
 
 We studied Qwen3-1.7B, a small open-weight reasoning model, using mathematical problems to measure how accurately and efficiently it works.
 
@@ -78,11 +78,16 @@ The [full report](docs/project-report-2026-11-04.md) includes training details, 
 - Individual-response timing and adapter-merge diagnostic: complete.
 - Full merged-model evaluation: complete, 1,800 new responses.
 - Standalone model export: complete and verified.
-- Project report: available; public model packaging and release remain.
+- Project report and model card: complete.
+- Full model uploaded to Hugging Face; publication prepared.
+
+## Model licence
+
+LeanReasoning uses the [LeanReasoning Model Licence 1.0](LICENSE-LEANREASONING.md): custom terms based on Apache 2.0 with a Microsoft exclusion. The unchanged upstream licence is preserved in the model distribution. See the full terms for scope and the limited hosting exception.
 
 ## Research files and history
 
-The [5 November Stage 8 snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/stage8-results-2026-11-05_13-37) contains the latest evidence and launchers, with original folder paths and a SHA-256 manifest. Full merged model weights remain in the local export pending publication.
+The [5 November Stage 8 snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/stage8-results-2026-11-05_13-37) contains the latest evidence and launchers, with original folder paths and a SHA-256 manifest. Full merged model weights are hosted separately on [Hugging Face](https://huggingface.co/realDeclan/LeanReasoning).
 
 The [26 October research snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/research-update-20261026T171315Z-975570) contains selected source, configurations, data and results available at that date. It predates the completed final evaluation and Stage 8 measurements.
 
