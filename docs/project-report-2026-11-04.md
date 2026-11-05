@@ -7,7 +7,7 @@ A small, targeted fine-tuning experiment on Qwen3-1.7B, combined with concise pr
 
 That is **76.0% fewer thinking tokens**, **75.3% less generation time**, and approximately **4× the workload throughput**. Final-answer accuracy was **88.83% versus 90.11%** for the original standard-prompt baseline: a 1.28 percentage-point difference.
 
-The project demonstrates a practical route from inspecting inefficient reasoning to training a smaller reasoning footprint and deploying it efficiently on a single RTX 3090. The result is a complete exported model, not only an adapter requiring separate execution.
+The project demonstrates a practical route from inspecting inefficient reasoning to training a smaller reasoning footprint and deploying it efficiently on a single RTX 3090. The result, named **LeanReasoning**, is a complete exported model, not only an adapter requiring separate execution.
 
 ## What we built
 
@@ -100,7 +100,7 @@ The exported BF16 model was saved, hash-checked, reloaded and used for all 1,800
 
 `9aeef6382c69bb7997ce3061d0d039c7a8631a112e656f896c8b762728d2c9e8`
 
-The complete weights remain in the local export; the compact evidence ZIP records their hashes. A public model release, final name and distribution terms remain to be completed.
+The complete weights remain in the local export; the compact evidence ZIP records their hashes. The model is named **LeanReasoning**. A public model release and final distribution terms remain to be completed.
 
 ## Supplementary diagnostics
 
