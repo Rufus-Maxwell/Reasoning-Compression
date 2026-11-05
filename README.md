@@ -10,6 +10,8 @@ The goal is simple: **get the same quality of answers with less computation.**
 
 ## The Project
 
+**LeanReasoning** is the name of our reasoning-compressed Qwen3-1.7B model.
+
 We studied Qwen3-1.7B, a small open-weight reasoning model, using mathematical problems to measure how accurately and efficiently it works.
 
 By examining where the model wastes time and tokens, we identified opportunities to shorten its reasoning through targeted fine-tuning.
@@ -79,6 +81,8 @@ The [full report](docs/project-report-2026-11-04.md) includes training details, 
 - Project report: available; public model packaging and release remain.
 
 ## Research files and history
+
+The [5 November Stage 8 snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/stage8-results-2026-11-05_13-37) contains the latest evidence and launchers, with original folder paths and a SHA-256 manifest. Full merged model weights remain in the local export pending publication.
 
 The [26 October research snapshot](https://github.com/Rufus-Maxwell/Reasoning-Compression/releases/tag/research-update-20261026T171315Z-975570) contains selected source, configurations, data and results available at that date. It predates the completed final evaluation and Stage 8 measurements.
 
