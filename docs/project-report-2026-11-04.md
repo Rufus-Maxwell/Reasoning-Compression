@@ -100,7 +100,7 @@ The exported BF16 model was saved, hash-checked, reloaded and used for all 1,800
 
 `9aeef6382c69bb7997ce3061d0d039c7a8631a112e656f896c8b762728d2c9e8`
 
-The complete weights remain in the local export; the compact evidence ZIP records their hashes. The model is named **LeanReasoning**. A public model release and final distribution terms remain to be completed.
+The complete weights remain in the local export; the compact evidence ZIP records their hashes. The model is named **LeanReasoning** and its complete checkpoint has been uploaded to [Hugging Face](https://huggingface.co/realDeclan/LeanReasoning). Distribution terms are specified in the custom [LeanReasoning Model Licence 1.0](../LICENSE-LEANREASONING.md), including the Microsoft exclusion and preservation of upstream rights.
 
 ## Supplementary diagnostics
 
